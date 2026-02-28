@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --primary: 255 76 36;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply min-h-screen bg-slate-50 text-slate-900 font-outfit;
+  }
+}
+
+@layer components {
+  .app-container {
+    @apply w-[90%] md:w-[85%] lg:w-[80%] mx-auto;
+  }
+  
+  .btn-primary {
+    @apply bg-primary text-white px-6 py-2 rounded-full font-medium transition-transform hover:scale-105 active:scale-95 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+}
