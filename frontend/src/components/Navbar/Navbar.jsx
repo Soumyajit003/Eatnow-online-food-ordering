@@ -4,7 +4,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { StoreContext } from '../../context/StoreContext';
 import { Search, ShoppingBasket, User, LogOut, ShoppingBag, Menu, X } from 'lucide-react';
 
-const Navbar = ({ setShowLogin }) => {
+export const Navbar = ({ setShowLogin }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { getTotalConstAmount, token, setToken } = useContext(StoreContext);
@@ -147,4 +147,3 @@ const Navbar = ({ setShowLogin }) => {
   );
 };
 
-export default Navbar;
