@@ -1,14 +1,23 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { assets } from '../../assets/assets';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { StoreContext } from '../../context/StoreContext';
 import { Search, ShoppingBasket, User, LogOut, ShoppingBag, Menu, X } from 'lucide-react';
 
 const Navbar = ({ setShowLogin }) => {
-  const [menu, setMenu] = useState("home");
+  const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { getTotalConstAmount, token, setToken } = useContext(StoreContext);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -18,95 +27,124 @@ const Navbar = ({ setShowLogin }) => {
 
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
+  const navLinks = [
+    { name: 'Home', path: '/', id: 'home' },
+    { name: 'Menu', path: '#explore-menu', id: 'menu' },
+    { name: 'Mobile App', path: '#app-download', id: 'mobile-app' },
+    { name: 'Contact Us', path: '#footer', id: 'contact-us' },
+  ];
+
   return (
-    <div className='w-full z-50 bg-white/80 backdrop-blur-md sticky top-0 shadow-sm transition-all duration-300'>
-      <div className='app-container flex justify-between items-center py-4'>
+    <nav className={`floating-pill-navbar ${isScrolled ? 'top-4 py-3' : 'top-6 py-4'} `}>
+      <div className='app-container flex justify-between items-center'>
         {/* Logo */}
-        <Link to='/' className='flex items-center'>
-          <img src={assets.logo} alt="Logo" className="h-8 sm:h-10 w-auto object-contain cursor-pointer" />
+        <Link to='/' className='flex items-center group'>
+          <h1 className="text-2xl md:text-3xl font-black text-white tracking-tighter cursor-pointer transition-transform group-hover:scale-105 font-outfit">
+            eat<span className="text-accent underline decoration-primary decoration-4 underline-offset-4">now</span>
+          </h1>
         </Link>
 
         {/* Desktop Menu */}
-        <ul className="hidden md:flex gap-8 text-slate-600 font-medium text-lg">
-          <Link to='/' onClick={() => setMenu("home")} className={`cursor-pointer hover:text-primary transition-colors ${menu === "home" ? "text-primary border-b-2 border-primary" : ""}`}>home</Link>
-          <a href='#explore-menu' onClick={() => setMenu("menu")} className={`cursor-pointer hover:text-primary transition-colors ${menu === "menu" ? "text-primary border-b-2 border-primary" : ""}`}>menu</a>
-          <a href='#app-download' onClick={() => setMenu("mobile-app")} className={`cursor-pointer hover:text-primary transition-colors ${menu === "mobile-app" ? "text-primary border-b-2 border-primary" : ""}`}>mobile app</a>
-          <a href='#footer' onClick={() => setMenu("contact-us")} className={`cursor-pointer hover:text-primary transition-colors ${menu === "contact-us" ? "text-primary border-b-2 border-primary" : ""}`}>contact us</a>
+        <ul className="hidden lg:flex items-center gap-2 text-white/80 font-semibold font-outfit">
+          {navLinks.map((link) => (
+            <li key={link.id}>
+              {link.path.startsWith('#') ? (
+                <a
+                  href={link.path}
+                  className={`nav-link-glow ${location.hash === link.path ? 'active' : ''}`}
+                >
+                  {link.name}
+                </a>
+              ) : (
+                <Link
+                  to={link.path}
+                  className={`nav-link-glow ${location.pathname === link.path ? 'active' : ''}`}
+                >
+                  {link.name}
+                </Link>
+              )}
+            </li>
+          ))}
         </ul>
 
         {/* Right Section */}
-        <div className="flex items-center gap-4 sm:gap-6">
-          <div className='cursor-pointer hover:text-primary transition-colors hidden sm:block'>
-            <Search size={24} className="text-slate-700 hover:text-primary" />
-          </div>
+        <div className="flex items-center gap-3 md:gap-6">
 
-          <div className="relative cursor-pointer">
+          <div className="relative group p-2 hover:bg-white/5 rounded-full transition-all">
             <Link to='/cart'>
-              <ShoppingBasket size={24} className="text-slate-700 hover:text-primary transition-colors" />
+              <ShoppingBasket size={24} className="text-white/80 group-hover:text-white transition-colors" />
             </Link>
             {getTotalConstAmount() !== 0 && (
-              <div className="absolute -top-2 -right-2 bg-primary text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
-              </div>
+              <span className="absolute top-1 right-1 bg-primary text-white text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center cart-pulse border-2 border-red-dark">
+                {/* Dynamically calculate count if possible, or just the dot */}
+              </span>
             )}
           </div>
 
           {!token ? (
             <button
               onClick={() => setShowLogin(true)}
-              className='hidden sm:block border border-primary text-primary px-6 py-2 rounded-full hover:bg-primary hover:text-white transition-all duration-300 font-medium'
+              className='btn-gradient !px-6 !py-2.5 !text-sm !font-bold'
             >
-              sign in
+              Sign In
             </button>
           ) : (
             <div className='relative group'>
-              <div className='flex items-center gap-2 cursor-pointer'>
-                <div className='p-2 bg-primary/10 rounded-full'>
-                  <User size={20} className='text-primary' />
+              <button className='flex items-center gap-2 p-1.5 bg-white/5 hover:bg-white/10 rounded-full border border-white/10 transition-all'>
+                <div className='w-8 h-8 rounded-full bg-gradient-to-tr from-primary to-accent flex items-center justify-center text-white'>
+                  <User size={18} />
                 </div>
-              </div>
+              </button>
 
               {/* Dropdown */}
-              <ul className="absolute right-0 top-full mt-2 w-48 bg-white shadow-lg rounded-lg py-2 hidden group-hover:flex flex-col border border-slate-100 z-50 animate-fadeIn">
-                <li className='flex items-center gap-3 px-4 py-3 hover:bg-slate-50 cursor-pointer text-slate-600 hover:text-primary transition-colors'>
-                  <ShoppingBag size={18} />
-                  <p>Orders</p>
+              <ul className="absolute right-0 top-full mt-4 w-52 bg-[#3a0a0a]/90 backdrop-blur-2xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] rounded-2xl p-2 hidden group-hover:flex flex-col z-50 animate-fadeIn">
+                <li className='flex items-center gap-3 px-4 py-3 hover:bg-white/5 rounded-xl cursor-pointer text-white/80 hover:text-white transition-all' onClick={() => navigate('/myorders')}>
+                  <ShoppingBag size={18} className='text-accent' />
+                  <span className='font-medium'>My Orders</span>
                 </li>
-                <hr className='border-slate-100' />
-                <li onClick={logout} className='flex items-center gap-3 px-4 py-3 hover:bg-slate-50 cursor-pointer text-slate-600 hover:text-primary transition-colors'>
+                <div className='h-px bg-white/5 my-1'></div>
+                <li onClick={logout} className='flex items-center gap-3 px-4 py-3 hover:bg-red-500/10 rounded-xl cursor-pointer text-white/80 hover:text-red-400 transition-all'>
                   <LogOut size={18} />
-                  <p>Logout</p>
+                  <span className='font-medium'>Logout</span>
                 </li>
               </ul>
             </div>
           )}
 
           {/* Mobile Menu Button */}
-          <button className="md:hidden text-slate-700" onClick={toggleMobileMenu}>
-            {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+          <button className="lg:hidden p-2 hover:bg-white/5 rounded-xl transition-all text-white" onClick={toggleMobileMenu}>
+            {isMobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
           </button>
         </div>
       </div>
 
       {/* Mobile Menu Dropdown */}
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-white border-t border-slate-100 py-4 px-6 flex flex-col gap-4 shadow-lg absolute w-full left-0 top-full z-40 animate-slideDown">
-          <Link to='/' onClick={() => { setMenu("home"); toggleMobileMenu() }} className={`${menu === "home" ? "text-primary font-bold" : "text-slate-600"}`}>Home</Link>
-          <a href='#explore-menu' onClick={() => { setMenu("menu"); toggleMobileMenu() }} className={`${menu === "menu" ? "text-primary font-bold" : "text-slate-600"}`}>Menu</a>
-          <a href='#app-download' onClick={() => { setMenu("mobile-app"); toggleMobileMenu() }} className={`${menu === "mobile-app" ? "text-primary font-bold" : "text-slate-600"}`}>Mobile App</a>
-          <a href='#footer' onClick={() => { setMenu("contact-us"); toggleMobileMenu() }} className={`${menu === "contact-us" ? "text-primary font-bold" : "text-slate-600"}`}>Contact Us</a>
-
-          {!token && (
-            <button
-              onClick={() => { setShowLogin(true); toggleMobileMenu() }}
-              className='w-full border border-primary text-primary px-6 py-2 rounded-full hover:bg-primary hover:text-white transition-all duration-300 font-medium mt-2'
-            >
-              Sign In
-            </button>
-          )}
+        <div className="lg:hidden absolute top-full left-0 w-full mt-4 px-4 z-50 animate-slideDown">
+          <div className='bg-[#2a0808]/95 backdrop-blur-3xl border border-white/10 rounded-3xl p-6 shadow-2xl flex flex-col gap-4'>
+            {navLinks.map((link) => (
+              <a
+                key={link.id}
+                href={link.path}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`text-lg font-bold px-4 py-2 rounded-xl transition-all ${menu === link.id ? 'bg-primary/20 text-primary' : 'text-white/60 hover:text-white hover:bg-white/5'}`}
+              >
+                {link.name}
+              </a>
+            ))}
+            {!token && (
+              <button
+                onClick={() => { setShowLogin(true); setIsMobileMenuOpen(false) }}
+                className='w-full btn-gradient mt-2 py-4'
+              >
+                Sign In
+              </button>
+            )}
+          </div>
         </div>
       )}
-    </div>
-  )
-}
+    </nav>
+  );
+};
 
-export default Navbar
+export default Navbar;

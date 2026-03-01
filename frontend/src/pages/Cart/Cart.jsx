@@ -1,84 +1,130 @@
 import React, { useContext } from "react";
 import { StoreContext } from "../../context/StoreContext";
 import { useNavigate } from "react-router-dom";
+import CartItem from "../../components/CartItem";
+import OrderSummary from "../../components/OrderSummary";
 import { Trash2 } from "lucide-react";
 
 const Cart = () => {
-  const { cartItems, food_list, removeFromCart, getTotalConstAmount, url } = useContext(StoreContext);
+  const { cartItems, food_list, removeFromCart, addToCart, getTotalConstAmount, url, setCartItems } = useContext(StoreContext);
   const navigate = useNavigate();
 
+  const subtotal = getTotalConstAmount();
+  const deliveryFee = subtotal === 0 ? 0 : 2.00;
+  const tax = subtotal * 0.08; // 8% tax example
+
   return (
-    <div className="mt-24 app-container animate-fadeIn">
-      <div className="flex flex-col gap-4">
-        <div className="grid grid-cols-[1fr_1.5fr_1fr_1fr_1fr_0.5fr] items-center text-slate-500 text-[max(1vw,12px)] font-medium bg-slate-50 p-4 rounded-lg shadow-sm">
-          <p>Items</p>
-          <p>Title</p>
-          <p>Price</p>
-          <p>Quantity</p>
-          <p>Total</p>
-          <p>Remove</p>
+    <div className="pt-24 pb-20 mt-10 animate-fadeIn">
+      <div className="app-container">
+        {/* Header */}
+        <div className="mb-12">
+          <h1 className="text-4xl font-bold text-white mb-2">Your Cart</h1>
+          <p className="text-white/60 text-lg">Review Your Cart and Place Your Order</p>
         </div>
-        <hr className="border-slate-200" />
-        {food_list.map((item, index) => {
-          if (cartItems[item._id] > 0) {
-            return (
-              <div key={item._id}>
-                <div className="grid grid-cols-[1fr_1.5fr_1fr_1fr_1fr_0.5fr] items-center text-slate-800 text-[max(1vw,13px)] py-3 px-4 hover:bg-slate-50 transition-colors rounded-lg">
-                  <img src={url + '/images/' + item.image} alt="" className="w-12 h-12 object-cover rounded-md" />
-                  <p className="font-medium">{item.name}</p>
-                  <p>${item.price}</p>
-                  <p>{cartItems[item._id]}</p>
-                  <p className="font-semibold">${item.price * cartItems[item._id]}</p>
-                  <p onClick={() => removeFromCart(item._id)} className="cursor-pointer text-red-400 hover:text-red-600 transition-colors bg-red-50 p-1.5 rounded-full w-fit">
-                    <Trash2 size={16} />
-                  </p>
+
+        <div className="flex flex-col lg:flex-row gap-12 items-start">
+          {/* Left Side - Cart Items */}
+          <div className="flex-1 w-full">
+            <div className="flex items-center justify-between mb-6 bg-white/5 p-4 rounded-xl border border-white/10">
+              <div className="flex items-center gap-3">
+                <div className="bg-red-mid p-1 rounded-md">
+                  <Trash2 size={16} className="text-white" />
                 </div>
-                <hr className="border-slate-100 my-2" />
+                <span className="text-white font-bold">Subtotal</span>
               </div>
-            );
-          }
-        })}
-      </div>
+              <div className="flex items-center gap-2">
+                <div className="w-5 h-5 rounded-full bg-green-500/20 flex items-center justify-center border border-green-500/30">
+                  <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                </div>
+              </div>
+            </div>
 
-      <div className="mt-20 flex flex-col-reverse md:flex-row justify-between gap-[max(12vw,20px)]">
-        <div className="flex-1 flex flex-col gap-5">
-          <h2 className="text-2xl font-bold text-slate-800">Cart Totals</h2>
-          <div className="flex flex-col gap-3">
-            <div className="flex justify-between text-slate-600">
-              <p>Subtotal</p>
-              <p>${getTotalConstAmount()}</p>
+            <div className="flex flex-col">
+              {food_list.map((item) => {
+                if (cartItems[item._id] > 0) {
+                  return (
+                    <CartItem
+                      key={item._id}
+                      item={item}
+                      quantity={cartItems[item._id]}
+                      addToCart={addToCart}
+                      removeFromCart={removeFromCart}
+                      url={url}
+                    />
+                  );
+                }
+                return null;
+              })}
             </div>
-            <hr className="border-slate-200" />
-            <div className="flex justify-between text-slate-600">
-              <p>Delivery Fee</p>
-              <p>${getTotalConstAmount() === 0 ? 0 : 2}</p>
-            </div>
-            <hr className="border-slate-200" />
-            <div className="flex justify-between text-slate-900 text-lg font-bold">
-              <b>Total</b>
-              <b>${getTotalConstAmount() === 0 ? 0 : getTotalConstAmount() + 2}</b>
-            </div>
+
+            {subtotal > 0 && (
+              <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-6 p-6 glass-card">
+                <button
+                  onClick={() => setCartItems({})}
+                  className="text-white/60 hover:text-white font-semibold transition-colors bg-white/5 px-6 py-2 rounded-lg"
+                >
+                  Clear Cart
+                </button>
+                <div className="flex items-center gap-4">
+                  <span className="text-white/60 font-bold uppercase tracking-wider">Total: ${subtotal.toFixed(2)}</span>
+                  <div className="bg-red-mid text-white px-6 py-2 rounded-lg font-bold shadow-lg">
+                    Total: ${subtotal.toFixed(2)}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {subtotal === 0 && (
+              <div className="text-center py-20 glass-card">
+                <p className="text-2xl text-white/40 font-bold">Your cart is empty</p>
+                <button
+                  onClick={() => navigate('/')}
+                  className="btn-gradient mt-6"
+                >
+                  Back to Menu
+                </button>
+              </div>
+            )}
           </div>
-          <button
-            onClick={() => navigate('/order')}
-            className="border-none bg-primary text-white w-[max(15vw,200px)] py-3 rounded-lg font-medium cursor-pointer transition-all hover:bg-secondary hover:shadow-lg active:scale-95"
-          >
-            PROCEED TO CHECKOUT
-          </button>
+
+          {/* Right Side - Summary */}
+          <div className="w-full lg:w-[400px] shrink-0">
+            <OrderSummary
+              subtotal={subtotal}
+              deliveryFee={deliveryFee}
+              tax={tax}
+              navigate={navigate}
+            />
+          </div>
         </div>
 
-        <div className="flex-1">
-          <div className="bg-slate-50 p-6 rounded-xl shadow-sm">
-            <p className="text-slate-600 mb-3">If you have a promo code, Enter it here</p>
-            <div className="mt-2 flex justify-between items-center bg-white rounded-lg border border-slate-200 overflow-hidden pl-3 shadow-inner">
-              <input
-                type="text"
-                placeholder="promo code"
-                className="bg-transparent border-none outline-none w-full py-3 text-slate-700 placeholder:text-slate-400"
-              />
-              <button className="w-[max(10vw,150px)] py-3 bg-black text-white px-8 font-medium hover:bg-slate-800 transition-colors">
-                Submit
-              </button>
+        {/* Big Step Indicator at Bottom */}
+        <div className="mt-24 max-w-4xl mx-auto">
+          <div className='flex items-center justify-between px-2 relative'>
+            {/* Connection Line Background */}
+            <div className="absolute top-4 left-10 right-10 h-1 bg-white/10 z-0"></div>
+            {/* Connection Line Active */}
+            <div className="absolute top-4 left-10 w-1/4 h-1 bg-gradient-to-r from-green-500 to-accent z-0"></div>
+
+            <div className='flex flex-col items-center gap-4 z-10'>
+              <div className='w-8 h-8 rounded-full bg-green-500 flex items-center justify-center shadow-[0_0_20px_rgba(34,197,94,0.4)]'>
+                <div className='w-3 h-3 rounded-full bg-white'></div>
+              </div>
+              <span className='text-sm text-white font-bold uppercase'>Shopping Cart</span>
+            </div>
+
+            <div className='flex flex-col items-center gap-4 z-10'>
+              <div className='w-8 h-8 rounded-full bg-white/10 flex items-center justify-center border border-white/20'>
+                <div className='w-3 h-3 rounded-full bg-white/20'></div>
+              </div>
+              <span className='text-sm text-white/40 font-bold uppercase'>Checkout</span>
+            </div>
+
+            <div className='flex flex-col items-center gap-4 z-10'>
+              <div className='w-8 h-8 rounded-full bg-white/10 flex items-center justify-center border border-white/20'>
+                <div className='w-3 h-3 rounded-full bg-white/20'></div>
+              </div>
+              <span className='text-sm text-white/40 font-bold uppercase'>Order Complete</span>
             </div>
           </div>
         </div>

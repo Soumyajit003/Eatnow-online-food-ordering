@@ -3,41 +3,50 @@ import { assets } from "../../assets/assets";
 
 const Footer = () => {
   return (
-    <div className="text-[#d9d9d9] bg-[#323232] flex flex-col items-center gap-5 px-[8vw] py-5 pt-20 mt-24" id="footer">
-      <div className="w-full grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr] gap-20">
-        <div className="flex flex-col items-start gap-5">
-          <img src={assets.logo} alt="" className="cursor-pointer" />
-          <p>
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Et,
-            molestiae? Quaerat id aspernatur dolorem harum ut nobis qui. In,
-            debitis. Temporibus quo molestiae aut placeat, harum qui et?
-            Aliquid, nulla!
-          </p>
-          <div className="flex gap-4">
-            <img src={assets.facebook_icon} alt="" className="w-10 mr-4 cursor-pointer hover:scale-110 transition-transform" />
-            <img src={assets.twitter_icon} alt="" className="w-10 mr-4 cursor-pointer hover:scale-110 transition-transform" />
-            <img src={assets.linkedin_icon} alt="" className="w-10 mr-4 cursor-pointer hover:scale-110 transition-transform" />
+    <div className="bg-red-dark/30 backdrop-blur-xl border-t border-white/5 text-white/70 py-16 mt-24" id="footer">
+      <div className="app-container">
+        <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr] gap-16 md:gap-24 mb-16">
+          <div className="flex flex-col items-start gap-8">
+            <h1 className="text-3xl font-bold text-white tracking-tight">eatnow</h1>
+            <p className="max-w-md leading-relaxed">
+              We bring the best food from your favorite local restaurants right to your doorstep. Quality, speed, and taste are our priorities.
+            </p>
+            <div className="flex gap-5">
+              {/* Social icons could be added here, using Lucide-react for consistency */}
+              <div className='w-11 h-11 rounded-full bg-white/5 border border-white/10 flex items-center justify-center cursor-pointer hover:bg-primary transition-all duration-300'>
+                <span className='text-sm'>FB</span>
+              </div>
+              <div className='w-11 h-11 rounded-full bg-white/5 border border-white/10 flex items-center justify-center cursor-pointer hover:bg-primary transition-all duration-300'>
+                <span className='text-sm'>TW</span>
+              </div>
+              <div className='w-11 h-11 rounded-full bg-white/5 border border-white/10 flex items-center justify-center cursor-pointer hover:bg-primary transition-all duration-300'>
+                <span className='text-sm'>LI</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col items-start gap-8">
+            <h2 className="text-xl font-bold text-white uppercase tracking-widest">Company</h2>
+            <ul className="flex flex-col gap-4">
+              <li className="cursor-pointer hover:text-accent transition-colors">Home</li>
+              <li className="cursor-pointer hover:text-accent transition-colors">About us</li>
+              <li className="cursor-pointer hover:text-accent transition-colors">Delivery</li>
+              <li className="cursor-pointer hover:text-accent transition-colors">Privacy policy</li>
+            </ul>
+          </div>
+
+          <div className="flex flex-col items-start gap-8">
+            <h2 className="text-xl font-bold text-white uppercase tracking-widest">Get in touch</h2>
+            <ul className="flex flex-col gap-4">
+              <li className="cursor-pointer hover:text-accent transition-colors">+91 984538497</li>
+              <li className="cursor-pointer hover:text-accent transition-colors">eatnow@gmail.com</li>
+            </ul>
           </div>
         </div>
-        <div className="flex flex-col items-start gap-5">
-          <h2 className="text-white text-xl font-bold">COMPANY</h2>
-          <ul className="flex flex-col gap-2.5">
-            <li className="list-none mb-2.5 cursor-pointer hover:text-white transition-colors">Home</li>
-            <li className="list-none mb-2.5 cursor-pointer hover:text-white transition-colors">About us</li>
-            <li className="list-none mb-2.5 cursor-pointer hover:text-white transition-colors">Delivery</li>
-            <li className="list-none mb-2.5 cursor-pointer hover:text-white transition-colors">Privacy policy</li>
-          </ul>
-        </div>
-        <div className="flex flex-col items-start gap-5">
-          <h2 className="text-white text-xl font-bold">GET IN TOUCH</h2>
-          <ul className="flex flex-col gap-2.5">
-            <li className="list-none mb-2.5 cursor-pointer hover:text-white transition-colors">+91 984538497</li>
-            <li className="list-none mb-2.5 cursor-pointer hover:text-white transition-colors">yummy@gmail.com</li>
-          </ul>
-        </div>
+
+        <div className="h-px bg-white/10 w-full mb-8"></div>
+        <p className="text-center text-sm font-medium">Copyright 2026 eatnow.com - All Rights Reserved.</p>
       </div>
-      <hr className="w-full h-[2px] my-5 bg-gray-500 border-none" />
-      <p className="footer-copyright text-center">Copyright 2024 Yummy.com - All Right Reserved.</p>
     </div>
   );
 };

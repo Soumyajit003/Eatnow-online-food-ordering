@@ -61,41 +61,41 @@ const PlaceOrder = () => {
   };
 
   return (
-    <form onSubmit={placeOrder} className='mt-24 app-container flex flex-col md:flex-row justify-between gap-12 animate-fadeIn mb-24'>
+    <form onSubmit={placeOrder} className='mt-[200px] app-container flex flex-col md:flex-row justify-between gap-12 animate-fadeIn mb-4'>
       <div className="w-full max-w-[500px]">
-        <p className="text-3xl font-semibold mb-12 text-slate-800">Delivery Information</p>
+        <p className="text-3xl font-semibold mb-12">Delivery Information</p>
         <div className="flex gap-2.5 mb-4">
-          <input required name='firstName' onChange={onChangeHandler} value={data.firstName} type="text" placeholder='First name' className="w-full p-2.5 border border-slate-300 rounded focus:border-primary outline-none transition-colors" />
-          <input required name='lastName' onChange={onChangeHandler} value={data.lastName} type="text" placeholder='Last name' className="w-full p-2.5 border border-slate-300 rounded focus:border-primary outline-none transition-colors" />
+          <input required name='firstName' onChange={onChangeHandler} value={data.firstName} type="text" placeholder='First name' className="w-full bg-transparent p-2.5 text-white border border-slate-300 rounded focus:border-white outline-none transition-colors" />
+          <input required name='lastName' onChange={onChangeHandler} value={data.lastName} type="text" placeholder='Last name' className="w-full bg-transparent p-2.5 text-white border border-slate-300 rounded focus:border-white outline-none transition-colors" />
         </div>
-        <input required name='email' onChange={onChangeHandler} value={data.email} type="text" placeholder='Email address' className="w-full p-2.5 border border-slate-300 rounded focus:border-primary outline-none transition-colors mb-4" />
-        <input required name='street' onChange={onChangeHandler} value={data.street} type="text" placeholder='Street' className="w-full p-2.5 border border-slate-300 rounded focus:border-primary outline-none transition-colors mb-4" />
+        <input required name='email' onChange={onChangeHandler} value={data.email} type="text" placeholder='Email address' className="w-full bg-transparent p-2.5 text-white border border-slate-300 rounded focus:border-white outline-none transition-colors mb-4" />
+        <input required name='street' onChange={onChangeHandler} value={data.street} type="text" placeholder='Street' className="w-full bg-transparent p-2.5 text-white border border-slate-300 rounded focus:border-white outline-none transition-colors mb-4" />
         <div className="flex gap-2.5 mb-4">
-          <input required name='city' onChange={onChangeHandler} value={data.city} type="text" placeholder='City' className="w-full p-2.5 border border-slate-300 rounded focus:border-primary outline-none transition-colors" />
-          <input required name='state' onChange={onChangeHandler} value={data.state} type="text" placeholder='State' className="w-full p-2.5 border border-slate-300 rounded focus:border-primary outline-none transition-colors" />
+          <input required name='city' onChange={onChangeHandler} value={data.city} type="text" placeholder='City' className="w-full bg-transparent p-2.5 text-white border border-slate-300 rounded focus:border-white outline-none transition-colors" />
+          <input required name='state' onChange={onChangeHandler} value={data.state} type="text" placeholder='State' className="w-full bg-transparent p-2.5 text-white border border-slate-300 rounded focus:border-white outline-none transition-colors" />
         </div>
         <div className="flex gap-2.5 mb-4">
-          <input required name='zipcode' onChange={onChangeHandler} value={data.zipcode} type="text" placeholder='Zip code' className="w-full p-2.5 border border-slate-300 rounded focus:border-primary outline-none transition-colors" />
-          <input required name='country' onChange={onChangeHandler} value={data.country} type="text" placeholder='Country' className="w-full p-2.5 border border-slate-300 rounded focus:border-primary outline-none transition-colors" />
+          <input required name='zipcode' onChange={onChangeHandler} value={data.zipcode} type="text" placeholder='Zip code' className="w-full bg-transparent p-2.5 text-white border border-slate-300 rounded focus:border-white outline-none transition-colors" />
+          <input required name='country' onChange={onChangeHandler} value={data.country} type="text" placeholder='Country' className="w-full bg-transparent p-2.5 text-white border border-slate-300 rounded focus:border-white outline-none transition-colors" />
         </div>
-        <input required name='phone' onChange={onChangeHandler} value={data.phone} type="text" placeholder='Phone' className="w-full p-2.5 border border-slate-300 rounded focus:border-primary outline-none transition-colors" />
+        <input required name='phone' onChange={onChangeHandler} value={data.phone} type="text" placeholder='Phone' className="w-full bg-transparent p-2.5 text-white border border-slate-300 rounded focus:border-white outline-none transition-colors" />
       </div>
 
       <div className="w-full max-w-[500px]">
         <div className="flex flex-col gap-5">
-          <h2 className="text-2xl font-bold text-slate-800">Cart Totals</h2>
+          <h2 className="text-2xl font-bold ">Cart Totals</h2>
           <div className="flex flex-col gap-3">
-            <div className="flex justify-between text-slate-600">
+            <div className="flex justify-between ">
               <p>Subtotal</p>
               <p>${getTotalConstAmount()}</p>
             </div>
             <hr className="border-slate-200" />
-            <div className="flex justify-between text-slate-600">
+            <div className="flex justify-between">
               <p>Delivery Fee</p>
               <p>${getTotalConstAmount() === 0 ? 0 : 2}</p>
             </div>
             <hr className="border-slate-200" />
-            <div className="flex justify-between text-slate-900 text-lg font-bold">
+            <div className="flex justify-between text-lg font-bold">
               <b>Total</b>
               <b>${getTotalConstAmount() === 0 ? 0 : getTotalConstAmount() + 2}</b>
             </div>

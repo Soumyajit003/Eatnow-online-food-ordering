@@ -1,46 +1,46 @@
 import React, { useContext } from 'react';
 import { assets } from '../../assets/assets';
 import { StoreContext } from '../../context/StoreContext';
-import { Plus, Minus } from 'lucide-react';
+import { Plus, Minus, Star } from 'lucide-react';
 
 const FoodItem = ({ id, name, price, description, image }) => {
   const { cartItems, addToCart, removeFromCart, url } = useContext(StoreContext);
 
   return (
-    <div className='w-full m-auto rounded-[15px] shadow-sm hover:shadow-xl transition-shadow duration-300 bg-white animate-fadeIn flex flex-col h-full overflow-hidden border border-slate-100'>
-      <div className="relative w-full h-[240px] overflow-hidden">
+    <div className='glass-card p-6 flex flex-col items-center gap-5 text-center group cursor-pointer hover:shadow-[0_0_30px_rgba(255,81,47,0.2)] animate-fadeIn'>
+      <div className='relative w-full aspect-square rounded-2xl overflow-hidden mb-2'>
         <img
           src={url + '/images/' + image}
           alt={name}
-          className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
         />
-        {!cartItems[id] ? (
-          <div
-            onClick={() => addToCart(id)}
-            className='absolute bottom-4 right-4 cursor-pointer rounded-full bg-white p-2 shadow-md hover:scale-110 transition-transform w-[40px] h-[40px] flex items-center justify-center'
-          >
-            <Plus size={20} className="text-slate-700" />
-          </div>
-        ) : (
-          <div className='absolute bottom-4 right-4 flex items-center gap-2 p-1 bg-white rounded-full shadow-md'>
-            <div onClick={() => removeFromCart(id)} className="w-[30px] h-[30px] rounded-full bg-red-100 flex items-center justify-center cursor-pointer hover:bg-red-200 transition-colors">
-              <Minus size={16} className="text-secondary" />
-            </div>
-            <p className="w-[20px] text-center font-medium text-slate-700">{cartItems[id]}</p>
-            <div onClick={() => addToCart(id)} className="w-[30px] h-[30px] rounded-full bg-green-100 flex items-center justify-center cursor-pointer hover:bg-green-200 transition-colors">
-              <Plus size={16} className="text-green-600" />
-            </div>
-          </div>
-        )}
+        {/* Restaurant Icon Overlay */}
+        <div className='absolute top-4 left-4 w-12 h-12 rounded-xl bg-red-dark/80 backdrop-blur-md flex items-center justify-center border border-white/10'>
+          <span className='text-xl'>🍽️</span>
+        </div>
       </div>
 
-      <div className="p-5 flex flex-col flex-grow">
-        <div className="flex justify-between items-start mb-2.5">
-          <p className="text-xl font-medium text-slate-800 line-clamp-1">{name}</p>
-          <img src={assets.rating_starts} alt="Rating" className="w-[70px]" />
+      <div className='flex flex-col gap-2 w-full'>
+        <h3 className='text-xl font-bold text-white group-hover:text-accent transition-colors'>{name}</h3>
+
+        {/* Stars */}
+        <div className='flex items-center justify-center gap-1 mb-2'>
+          <Star size={16} fill="#FFD700" className='text-[#FFD700]' />
+          <Star size={16} fill="#FFD700" className='text-[#FFD700]' />
+          <Star size={16} fill="#FFD700" className='text-[#FFD700]' />
+          <Star size={16} fill="#FFD700" className='text-[#FFD700]' />
+          <Star size={16} fill="#FFD700" className='text-[#FFD700]' />
         </div>
-        <p className="text-[#676767] text-sm leading-relaxed line-clamp-2 mb-4 flex-grow">{description}</p>
-        <p className="text-primary text-[22px] font-semibold">${price}</p>
+
+        <div className='flex items-center justify-between mt-2 pt-4 border-t border-white/10'>
+          <span className='text-accent font-bold text-xl'>${price}</span>
+          <button
+            onClick={(e) => { e.stopPropagation(); addToCart(id); }}
+            className='w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-primary transition-all duration-300'
+          >
+            <Plus size={20} />
+          </button>
+        </div>
       </div>
     </div>
   )

@@ -1,29 +1,39 @@
-@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-* {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-  font-family: Outfit;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply min-h-screen bg-[#f8f9fa] text-[#1f2937] font-outfit antialiased overflow-x-hidden;
+  }
 }
-body {
-  min-height: 100vh;
-  background-color: #fcfcfc;
-}
-a {
-  text-decoration: none;
-  color: inherit;
-}
-hr {
-  border: none;
-  height: 1px;
-  background-color: #a9a9a9;
-}
-.app-content{
-  display: flex;
-}
-.flex-col{
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+
+@layer components {
+  .sidebar-link {
+    @apply flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 hover:bg-white hover:shadow-md;
+  }
+
+  .sidebar-link.active {
+    @apply bg-white shadow-lg border-r-4 border-primary text-primary;
+  }
+
+  .glass-card {
+    @apply bg-white/80 backdrop-blur-md border border-white/20 rounded-2xl shadow-xl transition-all duration-300;
+  }
+
+  .admin-navbar {
+    @apply sticky top-0 z-50 bg-white/70 backdrop-blur-lg border-b border-gray-100 px-8 py-4;
+  }
+
+  .btn-primary {
+    @apply bg-brand-gradient text-white px-6 py-2 rounded-lg font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95;
+  }
+
+  .input-field {
+    @apply w-full p-3 rounded-xl border border-gray-200 focus:border-white focus:ring-2 focus:ring-primary/20 outline-none transition-all;
+  }
 }
